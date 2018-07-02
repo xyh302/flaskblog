@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block content %}
+    <div class="container">
+    {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+    <div class="col-md-4">
+        <form class="form form-horizontal" action='{{ url_for('auth.login') }}' method='POST'>
+            <label>登录</label>
+            {{ form.hidden_tag() }}
+            {{ wtf.form_errors(form, hiddens="only") }}
+            {{ wtf.form_field(form.username) }}
+            {{ wtf.form_field(form.password) }}
+            {{ wtf.form_field(form.submit) }}
+        </form>
+    </div>
+    <div>
+{% endblock %}
+

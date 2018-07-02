@@ -2,10 +2,11 @@ from flask import render_template, url_for, redirect, flash, request
 from app.auth.forms import LoginForm, RegisterForm
 from app.auth import bp
 from app.models import User
-from flask_login import current_user, login_user
+from flask_login import current_user, login_user, logout_user
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
+    print(current_user.is_authenticated)
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
     form = LoginForm()
@@ -16,9 +17,10 @@ def login():
             login_user(user)
             flash('欢迎登录')
             print(current_user.username)
+            print(current_user.is_authenticated)
             return redirect(url_for('main.index'))
         flash('无效的用户名或密码')
-    return render_template('login.html', form=form, title='登录')
+    return render_template('auth/login.html', form=form, title='登录')
 
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -31,5 +33,9 @@ def register():
         new_user.save()
         flash('注册成功')
         return redirect(url_for('main.index'))
-    return render_template('register.html', form=form, title='注册')
+    return render_template('auth/register.html', form=form, title='注册')
 
+@bp.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('main.index'))

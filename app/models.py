@@ -3,11 +3,8 @@ from flask_login import UserMixin
 from werkzeug.security import check_password_hash, \
     generate_password_hash
 
-@login.user_loader
-def load_user(username):
-    return User.objects(username=str(username)).first()
 
-class User(db.Document, UserMixin):
+class User(UserMixin, db.Document):
     username = db.StringField(required=True)
     password_hash = db.StringField(required=True)
     isAdmin = db.BooleanField(default=False)
@@ -18,7 +15,6 @@ class User(db.Document, UserMixin):
         'strict': False
     }
 
-
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -28,3 +24,24 @@ class User(db.Document, UserMixin):
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
+
+@login.user_loader
+def load_user(uid):
+    print('call load_user')
+    u = User.objects.with_id(uid)
+    print(u)
+    return u
+
+
+class Article(db.Document):
+    meta = {
+        'collection': 'article',
+    }
+    title = db.StringField(required=True)
+    content = db.StringField(required=True)
+    author = db.ReferenceField(User)
+    author_name = db.StringField(required=True)
+    create_time = db.DateTimeField()
+
+    def __repr__(self):
+        return "<Article> {}".format(self.title)
