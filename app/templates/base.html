@@ -8,6 +8,15 @@
     {% if title %}{{ title }} - Microblog{% else %}Welcome to Microblog{% endif %}
 {% endblock %}
 
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class="flashes">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
 {% block navbar %}
     <nav class="navbar navbar-static-top navbar-inverse">
         <div class="container">
@@ -26,6 +35,12 @@
                             <a href="{{ url_for('auth.login') }}">登录</a>
                         </li>
                     {% else %}
+                        <li>
+                            <a href="{{ url_for('post.post_view') }}">微博列表</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('post.new_post') }}">发微博</a>
+                        </li>
                         <li>
                             <a href="{{ url_for('article.new_article') }}">写文章</a>
                         </li>

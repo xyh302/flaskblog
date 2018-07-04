@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-8">
+                {% if posts %}
+                <ul class="list-group">
+                    {% for post in posts.items %}
+                    <div class="list-group-item" id="post" style="margin-top:5px">
+                    <h4>{{ post.author.username }}:</h4>
+                    <p>{{ post.content }}</p>
+                    {% if post.pic %}
+                        <img src="{{ post.pic }}" style="200px;width: 200px">
+                    {% endif %}
+                    <p id="post-time" style="padding-top:5px;font-size:5px;
+                        color:gray">{{ moment(post.create_time).format('LLL') }}</p>
+                    {% if post.id|string in current_user.love %}
+                        <span class="btn-like glyphicon glyphicon-thumbs-up" id="{{ post.id }}" flag="1" style="color:red"></span>
+                    {% else %}
+                        <span class="btn-like glyphicon glyphicon-thumbs-up" id="{{ post.id }}" flag="0"></span>
+                    {% endif %}
+                    <a href="{{ url_for('post.post_detail', post_id=post.id)}}">&nbsp&nbsp评论({{ post.comments | length }})</a>
+                    </div>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="col-lg-2"></div>
+        </div>
+    </div>
+{% endblock %}
+
+

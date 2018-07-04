@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-8 list-group-item">
+                <p>{{ post.author.username }}:</p>
+                <small>{{ moment(post.create_time).format('LLL') }}</small>
+                <h3>{{ post.content }}</h3>
+                {% if post.pic %}
+                <img src="{{ post.pic }}" style="200px;width: 200px">
+                {% endif %}
+                <br>
+            {% if post.liked_by %}
+                {% for u in post.liked_by %}
+                <a href="#">{{ u }}</a>
+                {% endfor %}
+                <span>赞了这条微博</span>
+                {% for comment in post.comments %}
+                <div class="list-group-item">
+                    <p style="margin: 0 0 0 0">{{ comment.author_name }}评论:</p>
+                    <small style="margin-top:2px; font-size:5px;color:gray">{{ moment(comment.create_time).format('LLL') }}</small>
+                    <p style="margin-bottom:2px">{{ comment.content }}</p>
+                </div>
+                {% endfor %}
+                <br>
+                <br>
+                <form class="form form-horizontal" action="" method="post">
+                    {{ form.hidden_tag() }}
+                    {{ wtf.form_field(form.content) }}
+                    {{ wtf.form_field(form.submit) }}
+                </form>
+            {% endif %}
+            </div>
+            <div class="col-lg-2"></div>
+        </div>
+    </div>
+{% endblock %}
+
+

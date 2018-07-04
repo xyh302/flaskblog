@@ -4,6 +4,7 @@ from app.auth import bp
 from app.models import User
 from flask_login import current_user, login_user, logout_user
 
+
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     print(current_user.is_authenticated)

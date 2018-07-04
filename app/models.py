@@ -30,6 +30,7 @@ def load_user(uid):
     print('call load_user')
     u = User.objects.with_id(uid)
     print(u)
+    print(uid)
     return u
 
 
@@ -45,3 +46,30 @@ class Article(db.Document):
 
     def __repr__(self):
         return "<Article> {}".format(self.title)
+
+
+class Post(db.Document):
+    meta = {
+        'collection': 'post',
+    }
+    content = db.StringField(required=True)
+    pic = db.StringField()
+    author = db.ReferenceField(User)
+    author_name = db.StringField(required=True)
+    create_time = db.DateTimeField()
+    comments = db.EmbeddedDocumentListField('Comment')
+    liked_by = db.ListField(db.StringField())
+
+    def __repr__(self):
+        return "<Post> {}".format(self.content)
+
+
+class Comment(db.EmbeddedDocument):
+    comment_id = db.StringField(max_length=250, required=True)
+    content = db.StringField(required=True)
+    author = db.ReferenceField(User)
+    author_name = db.StringField(required=True)
+    create_time = db.DateTimeField()
+
+    def __repr__(self):
+        return "<Comment> {}".format(self.content)
