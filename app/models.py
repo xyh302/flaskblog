@@ -1,7 +1,7 @@
-from app import db, login
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash, \
     generate_password_hash
+from .extensions import db
 
 
 class User(UserMixin, db.Document):
@@ -35,15 +35,6 @@ class User(UserMixin, db.Document):
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
-
-
-@login.user_loader
-def load_user(uid):
-    print('call load_user')
-    u = User.objects.with_id(uid)
-    print(u)
-    print(uid)
-    return u
 
 
 class Article(db.Document):

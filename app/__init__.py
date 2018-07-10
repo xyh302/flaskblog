@@ -1,16 +1,13 @@
 from flask import Flask
-from flask_bootstrap import Bootstrap
 from config import Config
-from flask_mongoengine import MongoEngine
 from flask_login import LoginManager
-from flask_moment import Moment
+from app.admin import admin
+from app.extensions import bootstrap, moment
+from app.models import db
 
 
-bootstrap = Bootstrap()
-db = MongoEngine()
 login = LoginManager()
 login.login_view = 'auth.login'
-moment = Moment()
 
 
 def create_app(config_class=Config):
@@ -21,6 +18,7 @@ def create_app(config_class=Config):
     db.init_app(app)
     login.init_app(app)
     moment.init_app(app)
+    admin.init_app(app)
 
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
@@ -39,5 +37,14 @@ def create_app(config_class=Config):
 
     return app
 
+
+@login.user_loader
+def load_user(uid):
+    from app.models import User
+    print('call load_user')
+    u = User.objects.with_id(uid)
+    print(u)
+    print(uid)
+    return u
 
 #from app import models
