@@ -32,7 +32,7 @@
                             {% for page in pagination.iter_pages() %}
                                 {% if page %}
                                     {% if page != pagination.page %}
-                                        <li><a href="{{ url_for(endpoint, page=page)) }}">{{ page }}</a></li>
+                                        <li><a href="{{ url_for(endpoint, page=page) }}">{{ page }}</a></li>
                                     {% else %}
                                         <li class="active"><a href="#">{{ page }}</a></li>
                                     {% endif %}
@@ -42,7 +42,7 @@
                     </nav>
                 {% endmacro %}
                 <div class="Page navigation">
-                    {{ render_navigation(posts, 'post.post_view')}}
+                    {{ render_navigation(posts, 'post.post_view') }}
                 </div>
                 {% else %}
                     <p>快发第一条微博吧</p>
