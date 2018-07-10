@@ -15,6 +15,18 @@ class User(UserMixin, db.Document):
         'strict': False
     }
 
+    @property
+    def password(self):
+        raise AttributeError('无权限')
+
+    @property
+    def is_admin(self):
+        return self.isAdmin
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
