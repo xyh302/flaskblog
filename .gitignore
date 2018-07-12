@@ -39,4 +39,4 @@ nosetests.xml
 venv
 app.db
 microblog.log*
-post_pic
+post_pic/xia
