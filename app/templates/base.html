@@ -36,13 +36,13 @@
                         </li>
                     {% else %}
                         <li>
-                            <a href="{{ url_for('post.post_view') }}">微博列表</a>
+                            <a href="{{ url_for('post_main.post_view') }}">微博列表</a>
                         </li>
                         <li>
-                            <a href="{{ url_for('post.new_post') }}">发微博</a>
+                            <a href="{{ url_for('post_main.new_post') }}">发微博</a>
                         </li>
                         <li>
-                            <a href="{{ url_for('article.new_article') }}">写文章</a>
+                            <a href="{{ url_for('article_main.new_article') }}">写文章</a>
                         </li>
                         <li>
                             <a href="{{ url_for('auth.logout') }}">退出</a>

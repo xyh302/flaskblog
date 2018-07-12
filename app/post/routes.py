@@ -1,7 +1,7 @@
 from app.post import bp
 from app.post.forms import PostForm, CommentForm
 from flask import request, current_app, flash, render_template, \
-    redirect, url_for
+    redirect, url_for, jsonify
 from flask_login import login_required, current_user
 from app.models import User, Post, Comment
 from datetime import datetime
@@ -19,7 +19,7 @@ def new_post():
                         author=User.objects(username=current_user.username).first(),
                         author_name=current_user.username,
                         create_time=datetime.utcnow())
-            if request.files['pic']:
+            if 'file' in request.files:
                 pic = request.files['pic']
                 fname = pic.filename
                 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif']
@@ -43,7 +43,7 @@ def new_post():
                     current_user.username, fname)
             post.save()
             flash('发布成功')
-            return redirect(url_for('post.post_view'))
+            return redirect(url_for('post_main.post_view'))
     return render_template('post/new_post.html',
                                form=form, title='发微博')
 
@@ -72,6 +72,40 @@ def post_detail(post_id):
                           create_time=datetime.utcnow())
         post.comments.append(comment)
         post.save()
-        return redirect(url_for('post.post_detail', post_id=post.id))
+        return redirect(url_for('post_main.post_detail', post_id=post.id))
     return render_template('post/post_detail.html',
                            title='微博全文', post=post, form=form)
+
+
+@bp.route('/like', methods=['POST'])
+@login_required
+def like():
+    if request.method == 'POST':
+        post_id = request.form.get('id')
+        user = User.objects(username=current_user.username).first()
+        post = Post.objects(id=post_id).first()
+        if post_id in user.love:
+            return jsonify({'info': '赞过了'})
+        else:
+            user.love.append(post_id)
+            user.save()
+            post.liked_by.append(user.username)
+            post.save()
+            return jsonify({'info': '点赞成功'})
+
+
+@bp.route('/unlike', methods=['POST'])
+@login_required
+def unlike():
+    if request.method == 'POST':
+        post_id = request.form.get('id')
+        post = Post.objects(id=post_id).first()
+        user = User.objects(username=current_user.username).first()
+        if post_id in user.love:
+            user.love.remove(post_id)
+            user.save()
+            post.liked_by.remove(user.username)
+            post.save()
+            return jsonify({'info': '取消赞成功'})
+        else:
+            return jsonify({'info': '没有点赞'})

@@ -17,11 +17,11 @@
                     <p id="post-time" style="padding-top:5px;font-size:5px;
                         color:gray">{{ moment(post.create_time).format('LLL') }}</p>
                     {% if post.id|string in current_user.love %}
-                        <span class="btn-like glyphicon glyphicon-thumbs-up" id="{{ post.id }}" flag="1" style="color:red"></span>
+                        <span class="btn-like glyphicon glyphicon-thumbs-up" id="{{ post.id }}" flag="1" style="color: red"></span>
                     {% else %}
                         <span class="btn-like glyphicon glyphicon-thumbs-up" id="{{ post.id }}" flag="0"></span>
                     {% endif %}
-                    <a href="{{ url_for('post.post_detail', post_id=post.id)}}">&nbsp&nbsp评论({{ post.comments | length }})</a>
+                    <a href="{{ url_for('post_main.post_detail', post_id=post.id)}}">&nbsp&nbsp评论({{ post.comments | length }})</a>
                     </div>
                     {% endfor %}
                 </ul>
@@ -42,7 +42,7 @@
                     </nav>
                 {% endmacro %}
                 <div class="Page navigation">
-                    {{ render_navigation(posts, 'post.post_view') }}
+                    {{ render_navigation(posts, 'post_main.post_view') }}
                 </div>
                 {% else %}
                     <p>快发第一条微博吧</p>
@@ -53,4 +53,8 @@
     </div>
 {% endblock %}
 
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/like.js') }}"></script>
+{% endblock %}
 

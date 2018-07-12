@@ -47,7 +47,7 @@ class MyHomeView(AdminIndexView):
     def logout(self):
         user = current_user
         if current_user.is_authenticated:
-            logout_user(user)
+            logout_user()
         return redirect(url_for('admin.index'))
 
 

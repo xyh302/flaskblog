@@ -13,11 +13,12 @@
                 <img src="{{ post.pic }}" style="200px;width: 200px">
                 {% endif %}
                 <br>
-            {% if post.liked_by %}
+                {% if post.liked_by %}
                 {% for u in post.liked_by %}
                 <a href="#">{{ u }}</a>
                 {% endfor %}
                 <span>赞了这条微博</span>
+                {% endif %}
                 {% for comment in post.comments %}
                 <div class="list-group-item">
                     <p style="margin: 0 0 0 0">{{ comment.author_name }}评论:</p>
@@ -32,11 +33,14 @@
                     {{ wtf.form_field(form.content) }}
                     {{ wtf.form_field(form.submit) }}
                 </form>
-            {% endif %}
             </div>
             <div class="col-lg-2"></div>
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
 {% endblock %}
 
 
